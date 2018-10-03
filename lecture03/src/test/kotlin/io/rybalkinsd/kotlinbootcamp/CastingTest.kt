@@ -19,7 +19,6 @@ class CastingTest {
     fun `cast 2 test`() {
         println(cast2(value))
         println(cast2(nValue))
-
     }
 
     @Test

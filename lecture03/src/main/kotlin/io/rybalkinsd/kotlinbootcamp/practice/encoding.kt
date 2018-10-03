@@ -1,8 +1,5 @@
 package io.rybalkinsd.kotlinbootcamp.practice
 
-import kotlin.math.min
-
-
 /**
  * NATO phonetic alphabet
  */
@@ -46,11 +43,11 @@ val reversedAssociation: Map<String, Char> = alphabet.associate { it to it[0].to
  *
  */
 fun String.decode(): String? {
-    if (this.isEmpty()) return ""
+    if (isEmpty()) return ""
     if (!this[0].isLetter())
-        return this[0] + (this.slice(1 until this.length).decode() ?: return null)
-    val c: Char = reversedAssociation[
-            this.slice(0 until min((association[this[0].toLowerCase()]?.length ?: 0), this.length)).toLowerCase().capitalize()
-    ] ?: return null
-    return c.toString() + (this.slice((association[this.toLowerCase()[0]]?.length ?: 0) until this.length).decode() ?: return null)
+        return this[0] + (this.slice(1 until length).decode() ?: return null)
+    val sliced = association[this[0].toLowerCase()]?.length ?: 0
+    if (sliced > length || sliced == 0) return null
+    val c: Char = reversedAssociation[this.slice(0 until sliced).toLowerCase().capitalize()] ?: return null
+    return c.toString() + (this.slice(sliced until length).decode() ?: return null)
 }

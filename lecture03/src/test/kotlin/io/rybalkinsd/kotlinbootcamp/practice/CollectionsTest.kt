@@ -1,7 +1,9 @@
 package io.rybalkinsd.kotlinbootcamp.practice
 
+import jdk.nashorn.internal.ir.annotations.Ignore
 import org.junit.Test
 
+@Ignore
 class CollectionsTest {
     @Test
     fun `how to create collections`() {
