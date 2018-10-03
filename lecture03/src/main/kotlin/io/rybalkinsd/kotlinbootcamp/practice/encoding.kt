@@ -1,5 +1,7 @@
 package io.rybalkinsd.kotlinbootcamp.practice
 
+import kotlin.math.min
+
 
 /**
  * NATO phonetic alphabet
@@ -23,16 +25,15 @@ val association: Map<Char, String> = alphabet.associateBy { it[0].toLowerCase() 
  * "abc".encode() == "AlfaBravoCharlie"
  *
  */
-fun String.encode(): String =
-        map { it.toLowerCase() }.
-        map { association[it] ?: it }
+fun String.encode(): String = this
+        .map { it.toLowerCase() }
+        .map { association[it] ?: it }
         .joinToString("")
 /**
  * A reversed mapping for association
  * [ alpha -> a, bravo -> b, ...]
  */
-val reversedAssociation: Map<String, Char> = emptyMap()
-
+val reversedAssociation: Map<String, Char> = alphabet.associate { it to it[0].toLowerCase() }
 
 /**
  * Extension function for String which decode it according to `reversedAssociation` mapping
@@ -44,8 +45,12 @@ val reversedAssociation: Map<String, Char> = emptyMap()
  * "charliee".decode() == null
  *
  */
-fun String.decode(): String? = TODO()
-
-
-
-
+fun String.decode(): String? {
+    if (this.isEmpty()) return ""
+    if (!this[0].isLetter())
+        return this[0] + (this.slice(1 until this.length).decode() ?: return null)
+    val c: Char = reversedAssociation[
+            this.slice(0 until min((association[this[0].toLowerCase()]?.length ?: 0), this.length)).toLowerCase().capitalize()
+    ] ?: return null
+    return c.toString() + (this.slice((association[this.toLowerCase()[0]]?.length ?: 0) until this.length).decode() ?: return null)
+}
