@@ -2,7 +2,7 @@ package io.rybalkinsd.kotlinbootcamp
 
 import org.junit.Test
 
-class CastingTest {
+class CastingTest1 {
 
     val value: Any = 42
     val nullValue: Any? = null
