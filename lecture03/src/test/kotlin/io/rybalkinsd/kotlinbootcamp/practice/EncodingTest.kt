@@ -40,10 +40,6 @@ class EncodingTest {
     fun `decode # abc`() {
         assertEquals("abc", "AlfaBravoCharlie".decode())
     }
-    @Test
-    fun `decode # Abc`() {
-        assertEquals("Abc", "AlfaBravoCharlie".decode())
-    }
 
     @Test
     fun `decode # AlfaBravo 123Charlie`() {
