@@ -166,7 +166,7 @@ fun values(str: String, wh: String): String? {
     return null
 }
 
-abstract class RandId {
+class RandId {
     companion object {
         fun get(): Long {
             var id = (Random().nextInt(899999999) + 100000000).toLong()
