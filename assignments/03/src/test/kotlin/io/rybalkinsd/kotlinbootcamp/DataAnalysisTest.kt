@@ -1,18 +1,23 @@
 package io.rybalkinsd.kotlinbootcamp
 
-import junit.framework.TestCase.assertTrue
 import org.junit.Test
-
 
 class DataAnalysisTest {
 
     @Test
+    fun otladka() {
+        for (i in listofProfiles)
+            print_profile(i)
+    }
+
+    @Test
     fun `check avg age`() {
-        assertTrue(avgAge.isNotEmpty())
+        println("Average ages")
+        avgAge.forEach { println("${it.key}: ${it.value}") }
     }
 
     @Test
     fun `check grouped profiles`() {
-        assertTrue(groupedProfiles.isNotEmpty())
+        groupedProfiles.forEach { x -> println("id: ${x.key}"); x.value.forEach { y -> print_profile(y) } }
     }
 }
