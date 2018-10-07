@@ -12,7 +12,9 @@ val rawProfiles = listOf(
             firstName=Dent,
             lastName=kent,
             age=88,
+
             source=linkedin
+
             """.trimIndent()
         ),
         RawProfile("""
@@ -107,7 +109,6 @@ val rawProfiles = listOf(
             firstName=dent,
             age=88,
             source=facebook
-
             """.trimIndent()
         ),
         RawProfile("""
@@ -151,21 +152,6 @@ class FacebookProfile(id: Long) : Profile(dataSource = DataSource.FACEBOOK, id =
 class VKProfile(id: Long) : Profile(dataSource = DataSource.VK, id = id)
 class LinkedInProfile(id: Long) : Profile(dataSource = DataSource.LINKEDIN, id = id)
 
-fun values(str: String, wh: String): String? {
-    var i = 0
-    while (i < str.length - wh.length) {
-        if (str.slice(i until (i + wh.length)) == wh) {
-            var res = ""
-            i += wh.length
-            while (i < str.length && (str[i].isLetterOrDigit() || str[i] == '_'))
-                res += str[i++].toString()
-            return res
-        }
-        i++
-    }
-    return null
-}
-
 class RandId {
     companion object {
         fun get(): Long {
@@ -179,31 +165,37 @@ class RandId {
     }
 }
 
+fun String.values(): Map<String, String> = toLowerCase()
+            .split('\n')
+            .map { it.split('=') }
+            .associate { it[0] to try { it[1].removeSuffix(",") } catch (e: Exception) { "" } }
+
 fun RawProfile.person(): Profile {
-    val p: Profile = when {
-        values(this.rawData, "source=") == "facebook" -> FacebookProfile(RandId.get())
-        values(this.rawData, "source=") == "vk" -> VKProfile(RandId.get())
+    val rval = this.rawData.values()
+    val pers = when {
+        rval["source"] == "facebook" -> FacebookProfile(RandId.get())
+        rval["source"] == "vk" -> VKProfile(RandId.get())
         else -> LinkedInProfile(RandId.get())
     }
-    p.age = values(this.rawData, "age=")?.toIntOrNull()
-    p.firstName = values(this.rawData, "firstName=")?.toLowerCase()?.capitalize()
-    p.lastName = values(this.rawData, "lastName=")?.toLowerCase()?.capitalize()
-    return p
+    pers.age = rval["age"]?.toIntOrNull()
+    pers.firstName = rval["firstname"]?.capitalize()
+    pers.lastName = rval["lastname"]?.capitalize()
+    return pers
 }
 
-val listofProfiles: List<Profile> = rawProfiles.map { it.person() }.fold(arrayListOf()) { res, pers ->
-    var in_res = false
-    for (j in res)
-        if (equals_profile(j, pers)) {
-            pers.id = j.id
-            if (pers.dataSource == j.dataSource)
-                in_res = true
+val listofProfiles: List<Profile> = rawProfiles.map { it.person() }
+        .fold(arrayListOf()) { res, pers ->
+            var in_res = false
+            for (j in res)
+                if (equals_profile(j, pers)) {
+                    pers.id = j.id
+                    if (pers.dataSource == j.dataSource)
+                        in_res = true
+                }
+            if (!in_res)
+                res.add(pers)
+            res
         }
-    if (!in_res)
-        res.add(pers)
-    res
-}
-
 fun DataSource.makeAvg(): Pair<DataSource, Double> {
     var count = listofProfiles.count { it.dataSource == this }
     val avg = listofProfiles.fold(0) { sum, pers ->
@@ -220,6 +212,7 @@ fun DataSource.makeAvg(): Pair<DataSource, Double> {
  * Task #2
  * Find the average age for each datasource (for profiles that has age)
  */
+
 val avgAge: Map<DataSource, Double> = mapOf(DataSource.FACEBOOK.makeAvg(), DataSource.LINKEDIN.makeAvg(), DataSource.VK.makeAvg())
 
 /**
@@ -227,5 +220,6 @@ val avgAge: Map<DataSource, Double> = mapOf(DataSource.FACEBOOK.makeAvg(), DataS
  * Group all user ids together with all profiles of this user.
  * We can assume users equality by : firstName & lastName & age
  */
+
 val groupedProfiles: Map<Long, List<Profile>> =
         listofProfiles.associate { it.id to listofProfiles.fold(arrayListOf<Profile>()) { res, x -> if (x.id == it.id) res.add(x); res } }

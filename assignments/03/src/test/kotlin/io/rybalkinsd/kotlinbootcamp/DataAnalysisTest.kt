@@ -4,11 +4,23 @@ import org.junit.Test
 
 class DataAnalysisTest {
 
+/*    @Test
+    fun ww() {
+        val str = RawProfile("""
+            firstName=Dent,
+            lastName=kent,
+            source=linkedin
+            age=lol
+            """.trimIndent())
+        print_profile(str.person())
+    }
+
+
     @Test
     fun otladka() {
         for (i in listofProfiles)
             print_profile(i)
-    }
+    }*/
 
     @Test
     fun `check avg age`() {
