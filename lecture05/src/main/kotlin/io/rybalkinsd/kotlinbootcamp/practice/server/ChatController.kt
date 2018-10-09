@@ -45,20 +45,60 @@ class ChatController {
         method = [RequestMethod.GET],
         produces = [MediaType.TEXT_PLAIN_VALUE]
     )
-    fun online(): ResponseEntity<String> = TODO()
+    fun online(): ResponseEntity<String> = when {
+        usersOnline.isEmpty() -> ResponseEntity.ok().body("No users")
+        else -> {
+            ResponseEntity.ok().body ( usersOnline.values.toList().joinToString("\n") )
+        }
+    }
 
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=I_AM_STUPID"
      */
-    // TODO
+    @RequestMapping(
+            path = ["logout"],
+            method = [RequestMethod.DELETE],
+            produces = [MediaType.TEXT_PLAIN_VALUE]
+    )
+    fun delete(@RequestParam("name")name: String): ResponseEntity<String> = when {
+        name.isEmpty() -> ResponseEntity.badRequest().body("Name is empty")
+        name !in usersOnline -> ResponseEntity.badRequest().body("Not logged")
+        else -> {
+            messages += "[$name] logged out".also { log.info(it) }
+            usersOnline.remove(name)
+            ResponseEntity.ok().build()
+        }
+    }
 
     /**
      * curl -X POST -i localhost:8080/chat/say -d "name=I_AM_STUPID&msg=Hello everyone in this chat"
      */
-    // TODO
-
+    @RequestMapping(
+            path = ["say"],
+            method = [RequestMethod.POST],
+            produces = [MediaType.TEXT_PLAIN_VALUE]
+    )
+    fun say(@RequestParam("name")name: String, @RequestParam("msg")msg: String): ResponseEntity<String> = when {
+        name.isEmpty() -> ResponseEntity.badRequest().body("Name is empty")
+        name !in usersOnline -> ResponseEntity.badRequest().body("Not logged")
+        msg.isEmpty() -> ResponseEntity.badRequest().body("Message is empty")
+        else -> {
+            messages += "[$name]: $msg".also { log.info(it) }
+            ResponseEntity.ok().build()
+        }
+    }
     /**
      * curl -i localhost:8080/chat/chat
      */
-    // TODO
+    @RequestMapping(
+            path = ["chat"],
+            method = [RequestMethod.GET],
+            produces = [MediaType.TEXT_PLAIN_VALUE]
+    )
+    fun history(): ResponseEntity<String> = when {
+        messages.isEmpty() -> ResponseEntity.ok().body("No messages")
+        else -> {
+            ResponseEntity.ok().body ( messages.joinToString("\n") )
+        }
+    }
 }
