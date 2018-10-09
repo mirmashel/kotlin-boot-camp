@@ -13,35 +13,40 @@ typealias Client = ChatClient
 @Ignore
 class ChatClientTest {
     companion object {
-        // Change this to your Last name
-        private const val MY_NAME_IN_CHAT = "Massx"
-        // Change this to any non-swear text
-        private const val MY_MESSAGE_TO_CHAT = "qweqweqweqweqwewqeeqw"
+        private const val MY_NAME_IN_CHAT = "Max"
+        private const val PASSWORD = "abcd"
+        private const val MY_MESSAGE_TO_CHAT = "aaaaaaaa"
         private val log = logger()
     }
 
     @Test
+    fun register() {
+        val response = Client.register(MY_NAME_IN_CHAT, PASSWORD).eager().also { println(it.body) }
+        assertTrue(response.code== 200 || response.code == 400)
+    }
+
+    @Test
     fun login() {
-        val response = Client.login(MY_NAME_IN_CHAT)
+        val response = Client.login(MY_NAME_IN_CHAT, PASSWORD).eager().also { println(it.body) }
         assertTrue(response.code== 200 || response.code == 400)
     }
 
     @Test
     fun viewHistory() {
-        val response = Client.viewHistory().eager().also { println(it.body) }
-        assertEquals(200, response.code)
+        val response = Client.viewHistory(MY_NAME_IN_CHAT).eager().also { println(it.body) }
+        assertTrue(response.code== 200 || response.code == 400)
     }
 
     @Test
     fun viewOnline() {
-        val response = Client.viewOnline().eager().also { println(it.body) }
-        assertEquals(200, response.code)
+        val response = Client.viewOnline(MY_NAME_IN_CHAT).eager().also { println(it.body) }
+        assertTrue(response.code== 200 || response.code == 400)
     }
 
     @Test
     fun say() {
         val response = Client.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT).eager().also { println(it.body) }
-        assertEquals(200, response.code)
+        assertTrue(response.code== 200 || response.code == 400)
     }
 
     @Test

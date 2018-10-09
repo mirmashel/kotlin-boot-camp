@@ -1,5 +1,6 @@
 package io.rybalkinsd.kotlinbootcamp.practice.client
 
+import com.kohttp.dsl.ParamContext
 import com.kohttp.dsl.httpGet
 import com.kohttp.dsl.httpPost
 import com.kohttp.ext.eager
@@ -15,24 +16,40 @@ object ChatClient {
     /**
      * POST /chat/login?name=my_name
      */
-    fun login(name: String) = httpPost {
+    fun register(name: String, password: String) = httpPost{
+            host = HOST
+            port = PORT
+            path = "/chat/register"
+            body {
+                form {
+                    "name" to name
+                    "password" to password
+                }
+            }
+        }
+
+    fun login(name: String, password: String) = httpPost {
         host = HOST
         port = PORT
         path = "/chat/login"
         body {
             form {
                 "name" to name
+                "password" to password
             }
         }
-    }.eager()
+    }
 
     /**
      * GET /chat/history
      */
-    fun viewHistory(): Response = httpGet {
+    fun viewHistory(name: String): Response = httpGet {
         host = HOST
         port = PORT
         path = "/chat/chat"
+        param {
+            "name" to name
+        }
     }
 
     /**
@@ -55,10 +72,13 @@ object ChatClient {
     /**
      * GET /chat/online
      */
-    fun viewOnline(): Response = httpGet {
+    fun viewOnline(name: String): Response = httpGet {
         host = HOST
         port = PORT
         path = "/chat/online"
+        param {
+            "name" to name
+        }
     }
 
     /**
