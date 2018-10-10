@@ -68,7 +68,7 @@ class ChatController {
         name !in usersOnline.keys -> ResponseEntity.ok().body("Not logged")
         usersOnline.isEmpty() -> ResponseEntity.ok().body("No users")
         else -> {
-            ResponseEntity.ok().body ( usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n") )
+            ResponseEntity.ok().body(usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
         }
     }
 
@@ -120,7 +120,7 @@ class ChatController {
         name !in usersOnline.keys -> ResponseEntity.badRequest().body("Not logged")
         messages.isEmpty() -> ResponseEntity.ok().body("No messages")
         else -> {
-            ResponseEntity.ok().body ( messages.joinToString("\n") )
+            ResponseEntity.ok().body(messages.joinToString("\n"))
         }
     }
 }

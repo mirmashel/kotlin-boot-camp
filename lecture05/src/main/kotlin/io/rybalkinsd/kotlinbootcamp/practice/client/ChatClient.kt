@@ -1,9 +1,7 @@
 package io.rybalkinsd.kotlinbootcamp.practice.client
 
-import com.kohttp.dsl.ParamContext
 import com.kohttp.dsl.httpGet
 import com.kohttp.dsl.httpPost
-import com.kohttp.ext.eager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -16,7 +14,7 @@ object ChatClient {
     /**
      * POST /chat/login?name=my_name
      */
-    fun register(name: String, password: String) = httpPost{
+    fun register(name: String, password: String) = httpPost {
             host = HOST
             port = PORT
             path = "/chat/register"
