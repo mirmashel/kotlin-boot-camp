@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" tests="6" skipped="6" failures="0" errors="0" timestamp="2018-10-09T23:59:21" hostname="DESKTOP-QBDTHE0" time="0.002">
+  <properties/>
+  <testcase name="viewOnline" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="register" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="say" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="login" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="viewHistory" classname="io.rybalkinsd.kotlinbootcamp.practice.ChatClientTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
