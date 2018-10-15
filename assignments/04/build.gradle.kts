@@ -37,3 +37,17 @@ tasks {
         dependsOn(ktlint)
     }
 }
+
+/*
+val jarr = task("jarr", type = Jar::class) {
+    baseName = "${project.name}r"
+    manifest {
+        attributes["Main-Class"] = "game.mainKt"
+    }
+    from(
+            configurations.runtime.map {
+                if (it.isDirectory) it else zipTree(it)
+            }
+    )
+    with(tasks["jar"] as CopySpec)
+}*/
