@@ -17,6 +17,7 @@ class ExampleController {
     @Autowired
     lateinit var requestBean: RequestBean
 
+
     @Autowired
     lateinit var singletonBean: SingletonBean
 
