@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.io.File
+import java.time.LocalDateTime
 import java.util.Queue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -18,6 +20,8 @@ class ChatController {
     val log = logger()
     val messages: Queue<String> = ConcurrentLinkedQueue()
     val usersOnline: MutableMap<String, String> = ConcurrentHashMap()
+    var loaded = false
+
 
     @RequestMapping(
             path = ["/login"],
@@ -46,11 +50,29 @@ class ChatController {
             method = [RequestMethod.GET],
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
-    fun online(): ResponseEntity<String> = TODO()
+    fun online(): ResponseEntity<String> = when {
+        usersOnline.isEmpty() -> ResponseEntity.ok().body("No users")
+        else -> {
+            ResponseEntity.ok().body(usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
+        }
+    }
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=MY_NAME"
      */
-
+    @RequestMapping(
+        path = ["logout"],
+        method = [RequestMethod.POST],
+        produces = [MediaType.TEXT_PLAIN_VALUE]
+    )
+    fun delete(@RequestParam("name")name: String): ResponseEntity<String> = when {
+        name.isEmpty() -> ResponseEntity.badRequest().body("Name is empty")
+        name !in usersOnline.keys -> ResponseEntity.badRequest().body("Not logged")
+        else -> {
+            messages += "[$name] logged out".also { log.info(it) }
+            usersOnline.remove(name)
+            ResponseEntity.ok("You logged out")
+        }
+    }
 
     /**
      * curl -X POST -i localhost:8080/chat/say -d "name=MY_NAME&msg=Hello everyone in this chat"
@@ -65,7 +87,8 @@ class ChatController {
         name !in usersOnline.keys -> ResponseEntity.badRequest().body("User not online")
         msg.isEmpty() -> ResponseEntity.ok().build()
         else -> {
-            messages += "[$name]: $msg".also { log.info(it) }
+            val time = LocalDateTime.now()
+            messages += "[${time.hour}:${time.minute}:${time.second}] $name: $msg".also { log.info(it) }
             ResponseEntity.ok().build()
         }
     }
@@ -79,5 +102,20 @@ class ChatController {
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
     @ResponseBody
-    fun history(): String = messages.joinToString(separator = "\n")
+    fun history(): String {
+        if (!loaded) {
+            val f  = File("save.txt")
+            f.readText().split("\n").forEach {
+                messages += it
+            }
+            loaded = true
+        }
+        savehist()
+        return messages.joinToString(separator = "\n")
+    }
+
+    fun savehist() {
+        val f = File("save.txt")
+        f.writeText(messages.joinToString("\n"))
+    }
 }
