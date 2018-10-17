@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
-import java.io.File
 import java.time.LocalDateTime
 import java.util.Queue
 import java.util.concurrent.ConcurrentHashMap
@@ -24,12 +23,12 @@ class ChatController {
 
 
     @RequestMapping(
-            path = ["/login"],
+            path = ["login"],
             method = [RequestMethod.POST],
             consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE]
     )
     fun login(@RequestParam("name") name: String): ResponseEntity<String> = when {
-        name.isEmpty() -> ResponseEntity.badRequest().body("Name is too short")
+        name.isEmpty() || name.length <= 2 -> ResponseEntity.badRequest().body("Name is too short")
         name.length > 20 -> ResponseEntity.badRequest().body("Name is too long")
         usersOnline.contains(name) -> ResponseEntity.badRequest().body("Already logged in")
         else -> {
@@ -103,19 +102,7 @@ class ChatController {
     )
     @ResponseBody
     fun history(): String {
-        if (!loaded) {
-            val f  = File("save.txt")
-            f.readText().split("\n").forEach {
-                messages += it
-            }
-            loaded = true
-        }
-        savehist()
         return messages.joinToString(separator = "\n")
     }
 
-    fun savehist() {
-        val f = File("save.txt")
-        f.writeText(messages.joinToString("\n"))
-    }
 }
