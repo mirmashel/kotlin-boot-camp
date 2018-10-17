@@ -50,7 +50,7 @@ class ChatController {
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=MY_NAME"
      */
-    // TODO
+
 
     /**
      * curl -X POST -i localhost:8080/chat/say -d "name=MY_NAME&msg=Hello everyone in this chat"
@@ -61,9 +61,9 @@ class ChatController {
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
     fun say(@RequestParam("name")name: String, @RequestParam("msg")msg: String): ResponseEntity<String> = when {
-        name.isEmpty() -> ResponseEntity.badRequest().body("Name is empty")
-        name !in usersOnline.keys -> ResponseEntity.badRequest().body("Not logged")
-        msg.isEmpty() -> ResponseEntity.badRequest().body("Message is empty")
+        name.isEmpty() -> ResponseEntity.badRequest().body("User not online")
+        name !in usersOnline.keys -> ResponseEntity.badRequest().body("User not online")
+        msg.isEmpty() -> ResponseEntity.ok().build()
         else -> {
             messages += "[$name]: $msg".also { log.info(it) }
             ResponseEntity.ok().build()
