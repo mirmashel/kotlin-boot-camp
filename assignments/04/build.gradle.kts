@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.jvm.tasks.Jar
 
 group = "io.rybalkinsd"
 version = "1.0-SNAPSHOT"
@@ -33,21 +34,19 @@ tasks {
         args = listOf("src/**/*.kt")
     }
 
+    "build" {
+        dependsOn(fatJar)
+    }
+
     "check" {
         dependsOn(ktlint)
     }
 }
-
-/*
-val jarr = task("jarr", type = Jar::class) {
-    baseName = "${project.name}r"
+val fatJar = task("fatJar", type = Jar::class) {
+    baseName = "${project.name}-fat"
     manifest {
-        attributes["Main-Class"] = "game.mainKt"
+        attributes["Main-Class"] = "game.MainKt"
     }
-    from(
-            configurations.runtime.map {
-                if (it.isDirectory) it else zipTree(it)
-            }
-    )
+    from(configurations.runtime.map({ if (it.isDirectory) it else zipTree(it) }))
     with(tasks["jar"] as CopySpec)
-}*/
+}
