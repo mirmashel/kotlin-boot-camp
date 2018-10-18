@@ -4,12 +4,12 @@
 <html>
 <body>
 <div id="header">
-    <form method="POST" id="nameform" action="javascript:void(null);" onsubmit="login()">
+    <form method="POST" id="nameform" class="button" action="javascript:void(null);" onwheel="login()">
         <input id="name" name="name" value="" style="font-size:medium" type="text" >
         <input value="Login" style="font-size:large" type="submit">
     </form>
-    <form method="POST" id="nanaa" action="javascript:void(null);" onsubmit="logout()">
-        <input id="log" value="Logout" style="font-size:large" type="submit">
+    <form method="POST" id="nanaa"  action="javascript:void(null);" onsubmit="logout()">
+        <input id="log" value="Logout" class="button" style="font-size:large" type="submit">
     </form>
 
 </div>
@@ -57,7 +57,7 @@
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/history",
             "method": "GET",
-        }
+        };
         $.ajax(settings).done(function (response) {
             //console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
@@ -97,7 +97,7 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-    function login() {
+    function login() {1
         var name = $('#nameform').serialize();
         console.log(logged);
         if (logged !== "")
@@ -113,9 +113,8 @@
         $.ajax(settings).done(function (response) {
             $('#nameform').hide();
             $('#nanaa').show();
-            
-
-            console.log($('#log').value);
+            var b = document.getElementById("log");
+            b.value = "Logout: " + name.split("=")[1];
             logged = name;
             localStorage.setItem("login", logged);
             loadHistory();
@@ -142,6 +141,7 @@
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+
         });
         logged = "";
         localStorage.removeItem("login");

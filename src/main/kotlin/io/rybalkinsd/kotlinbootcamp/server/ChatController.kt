@@ -31,6 +31,7 @@ class ChatController {
         name.isEmpty() || name.length <= 2 -> ResponseEntity.badRequest().body("Name is too short")
         name.length > 20 -> ResponseEntity.badRequest().body("Name is too long")
         usersOnline.contains(name) -> ResponseEntity.badRequest().body("Already logged in")
+        !name.all { it.isLetterOrDigit() } -> ResponseEntity.badRequest().body("Body must contain only letters or digits")
         else -> {
             usersOnline[name] = name
             messages += "[$name] logged in".also { log.info(it) }
@@ -113,9 +114,9 @@ class ChatController {
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
     fun check(@RequestParam("name") name: String): String {
-        log.info(name)
-        return when {
-            name in usersOnline -> "yes"
+        log.info("111" + name)
+        return when (name) {
+            in usersOnline -> "yes"
             else -> "no"
         }
     }

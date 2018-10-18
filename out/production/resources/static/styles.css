@@ -16,6 +16,12 @@
     right: 2%;
 }
 
+.button {
+    position: absolute;
+    top: 6%;
+    left: 2%;
+}
+
 .form {
     padding: 7px;
     background: #99CCCC;
