@@ -21,7 +21,6 @@ class ChatController {
     val usersOnline: MutableMap<String, String> = ConcurrentHashMap()
     var loaded = false
 
-
     @RequestMapping(
             path = ["login"],
             method = [RequestMethod.POST],
@@ -56,7 +55,6 @@ class ChatController {
             ResponseEntity.ok().body("Users online:\n" + usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
         }
     }
-
 
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=MY_NAME"
@@ -112,9 +110,8 @@ class ChatController {
             path = ["check"],
             method = [RequestMethod.GET]
     )
-    fun check(@RequestParam("name") name: String) =  when (name) {
+    fun check(@RequestParam("name") name: String) = when (name) {
         in usersOnline -> ResponseEntity.ok()
         else -> ResponseEntity.badRequest()
     }
-
 }
