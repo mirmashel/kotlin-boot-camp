@@ -53,6 +53,7 @@
             "method": "GET"
         };
         $.ajax(settings).done(function (response) {
+            console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
             $("#history").scrollTop($("#history")[0].scrollHeight);
         }).fail(function (jqXHR, textStatus) {
@@ -140,8 +141,12 @@
         localStorage.removeItem("login");
     }
     window.onload = function load() {
-        if (localStorage.length !== 0 && (localStorage.getItem("login"))) {
-            logged = localStorage.getItem("login")
+        if (localStorage.length !== 0 && check(localStorage.getItem("login"))) {
+            logged = localStorage.getItem("login");
+            console.log(logged)
+            var b = document.getElementById("log");
+            b.value = "Logout: " + name.split("=")[1];
+            logged = name;
             $('#nameform').hide();
             $('#nanaa').show();
         } else {
