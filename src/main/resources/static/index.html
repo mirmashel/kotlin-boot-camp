@@ -143,7 +143,6 @@
     window.onload = function load() {
         if (localStorage.length !== 0 && check(localStorage.getItem("login"))) {
             logged = localStorage.getItem("login");
-            console.log(logged)
             var b = document.getElementById("log");
             b.value = "Logout: " + name.split("=")[1];
             logged = name;
