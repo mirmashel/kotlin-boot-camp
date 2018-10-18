@@ -110,15 +110,11 @@ class ChatController {
 
     @RequestMapping(
             path = ["check"],
-            method = [RequestMethod.GET],
-            produces = [MediaType.TEXT_PLAIN_VALUE]
+            method = [RequestMethod.GET]
     )
-    fun check(@RequestParam("name") name: String): String {
-        log.info("111" + name)
-        return when (name) {
-            in usersOnline -> "yes"
-            else -> "no"
-        }
+    fun check(@RequestParam("name") name: String) =  when (name) {
+        in usersOnline -> ResponseEntity.ok()
+        else -> ResponseEntity.badRequest()
     }
 
 }

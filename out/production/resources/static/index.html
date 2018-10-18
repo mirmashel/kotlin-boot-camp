@@ -4,9 +4,9 @@
 <html>
 <body>
 <div id="header">
-    <form method="POST" id="nameform" class="button" action="javascript:void(null);" onwheel="login()">
+    <form method="POST" id="nameform" class="button" action="javascript:void(null);">
         <input id="name" name="name" value="" style="font-size:medium" type="text" >
-        <input value="Login" style="font-size:large" type="submit">
+        <input value="Login" style="font-size:large" type="submit"  onclick="login()">
     </form>
     <form method="POST" id="nanaa"  action="javascript:void(null);" onsubmit="logout()">
         <input id="log" value="Logout" class="button" style="font-size:large" type="submit">
@@ -32,23 +32,17 @@
     var port = 8080;
     var logged = "";
     $('#nanaa').hide();
-    function check() {
+    function check(name) {
         var settings = {
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/check",
             "method": "GET",
-            "data": localStorage.getItem("login")
+            "data": name
         };
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-            if (response === "yes") {
-                logged = name;
-                localStorage.clear()
-            }
-           /* $("#history").html(response.replace(/\n/g, "<br />"))
-            $("#history").scrollTop($("#history")[0].scrollHeight);*/
-        }).fail(function (jqXHR, textStatus) {
-            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        $.ajax(settings).done(function () {
+            return 1;
+        }).fail(function () {
+            return 0;
         });
     }
 
@@ -56,10 +50,9 @@
         var settings = {
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/history",
-            "method": "GET",
+            "method": "GET"
         };
         $.ajax(settings).done(function (response) {
-            //console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
             $("#history").scrollTop($("#history")[0].scrollHeight);
         }).fail(function (jqXHR, textStatus) {
@@ -147,10 +140,13 @@
         localStorage.removeItem("login");
     }
     window.onload = function load() {
-        if (localStorage.length !== 0) {
-            check();
-        } else
+        if (localStorage.length !== 0 && (localStorage.getItem("login"))) {
+            logged = localStorage.getItem("login")
+            $('#nameform').hide();
+            $('#nanaa').show();
+        } else {
             logged = ""
+        }
     };
     loadHistory();
     loadOnline();
