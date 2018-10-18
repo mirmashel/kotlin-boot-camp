@@ -50,9 +50,9 @@ class ChatController {
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
     fun online(): ResponseEntity<String> = when {
-        usersOnline.isEmpty() -> ResponseEntity.ok().body("No users")
+        usersOnline.isEmpty() -> ResponseEntity.ok().body("Users online:\nNo users")
         else -> {
-            ResponseEntity.ok().body(usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
+            ResponseEntity.ok().body("Users online:\n" + usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
         }
     }
 

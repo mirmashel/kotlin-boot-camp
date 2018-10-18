@@ -3,34 +3,34 @@
 }
 
 .chat {
-    background: #99CCCC;
-    font-family: "Courier New", Courier, monospace;
-    padding: 7px;
     margin: 0 0 1em;
-    overflow: auto;
     height: 67%;
-    width: 20%;
-    position: absolute;
+    width: 72%;
     left: 2%;
-    top: 22%;
 }
 .online {
-    background: #99CCCC;
-    font-family: "Courier New", Courier, monospace;
-    padding: 7px;
+
     margin-left: auto;
     margin-right: 0;
-    overflow: auto;
-    height: 67%;
     width: 20%;
-    position: absolute;
     right: 2%;
-    top: 22%;
 }
+
+.form {
+    padding: 7px;
+    background: #99CCCC;
+    font-family: "Courier New", Courier, monospace;
+    top: 15%;
+    position: absolute;
+    height: 75%;
+    overflow: auto;
+}
+/*
 .form {
     height: 67%;
     width: 75%;
 }
+*/
 
 .msginput {
     width: 80%;

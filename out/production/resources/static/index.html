@@ -15,7 +15,7 @@
 </div>
 <div id="body">
     <div id="history" class="chat form"></div>
-    <div id="online" class="online"></div>
+    <div id="online" class="online form"></div>
 </div>
 <div id="footer">
     <form method="POST" id="msgform" action="javascript:void(null);" onsubmit="say()">
@@ -59,7 +59,7 @@
             "method": "GET",
         }
         $.ajax(settings).done(function (response) {
-            console.log(response);
+            //console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
             $("#history").scrollTop($("#history")[0].scrollHeight);
         }).fail(function (jqXHR, textStatus) {
@@ -113,6 +113,9 @@
         $.ajax(settings).done(function (response) {
             $('#nameform').hide();
             $('#nanaa').show();
+            
+
+            console.log($('#log').value);
             logged = name;
             localStorage.setItem("login", logged);
             loadHistory();
