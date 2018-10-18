@@ -5,11 +5,11 @@
 <body>
 <div id="header">
     <form method="POST" id="nameform" action="javascript:void(null);" onsubmit="login()">
-        <input id="name" name="name" value="" style="font-size:medium" type="text">
+        <input id="name" name="name" value="" style="font-size:medium" type="text" >
         <input value="Login" style="font-size:large" type="submit">
     </form>
     <form method="POST" id="nanaa" action="javascript:void(null);" onsubmit="logout()">
-        <input value="Logout" style="font-size:large" type="submit">
+        <input id="log" value="Logout" style="font-size:large" type="submit">
     </form>
 
 </div>
@@ -30,6 +30,7 @@
 <script>
     var host = "localhost";
     var port = 8080;
+    var logged = "";
     function loadHistory() {
         var settings = {
             "crossDomain": true,
@@ -58,7 +59,8 @@
     }
     function say() {
         var msg = $('#msgform').serialize();
-        var name = $('#nameform').serialize();
+        //var name = $('#nameform').serialize();
+        var name = logged;
         var settings = {
             "method": "POST",
             "crossDomain": true,
@@ -75,12 +77,17 @@
     }
     function login() {
         var name = $('#nameform').serialize();
+        if (logged != "")
+            return;
+        logged = name;
+        localStorage.setItem("login", logged);
         var settings = {
             "method": "POST",
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/login",
             "data": name
         };
+
         $.ajax(settings).done(function (response) {
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
@@ -89,19 +96,26 @@
         });
     }
     function logout() {
-        var name = $('#nameform').serialize();
+        //var name = $('#nameform').serialize();
+        var name = logged;
         var settings = {
             "method": "POST",
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/logout",
             "data": name
         };
+        logged = "";
+        localStorage.removeItem("login");
         $.ajax(settings).done(function (response) {
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
+    }
+    window.onload = function load() {
+        if (localStorage.length != 0)
+            logged = localStorage.getItem("login");
     }
     loadHistory();
     loadOnline();
