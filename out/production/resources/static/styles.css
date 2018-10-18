@@ -8,6 +8,11 @@
     padding: 7px;
     margin: 0 0 1em;
     overflow: auto;
+    height: 67%;
+    width: 20%;
+    position: absolute;
+    left: 2%;
+    top: 22%;
 }
 .online {
     background: #99CCCC;

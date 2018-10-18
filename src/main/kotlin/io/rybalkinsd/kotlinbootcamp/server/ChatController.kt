@@ -55,6 +55,8 @@ class ChatController {
             ResponseEntity.ok().body(usersOnline.values.toList().sortedBy { it.toLowerCase() }.joinToString("\n"))
         }
     }
+
+
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=MY_NAME"
      */
@@ -103,6 +105,19 @@ class ChatController {
     @ResponseBody
     fun history(): String {
         return messages.joinToString(separator = "\n")
+    }
+
+    @RequestMapping(
+            path = ["check"],
+            method = [RequestMethod.GET],
+            produces = [MediaType.TEXT_PLAIN_VALUE]
+    )
+    fun check(@RequestParam("name") name: String): String {
+        log.info(name)
+        return when {
+            name in usersOnline -> "yes"
+            else -> "no"
+        }
     }
 
 }

@@ -31,6 +31,27 @@
     var host = "localhost";
     var port = 8080;
     var logged = "";
+    $('#nanaa').hide();
+    function check() {
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/check",
+            "method": "GET",
+            "data": localStorage.getItem("login")
+        };
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            if (response === "yes") {
+                logged = name;
+                localStorage.clear()
+            }
+           /* $("#history").html(response.replace(/\n/g, "<br />"))
+            $("#history").scrollTop($("#history")[0].scrollHeight);*/
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });
+    }
+
     function loadHistory() {
         var settings = {
             "crossDomain": true,
@@ -38,6 +59,7 @@
             "method": "GET",
         }
         $.ajax(settings).done(function (response) {
+            console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
             $("#history").scrollTop($("#history")[0].scrollHeight);
         }).fail(function (jqXHR, textStatus) {
@@ -77,10 +99,10 @@
     }
     function login() {
         var name = $('#nameform').serialize();
-        if (logged != "")
+        console.log(logged);
+        if (logged !== "")
             return;
-        logged = name;
-        localStorage.setItem("login", logged);
+
         var settings = {
             "method": "POST",
             "crossDomain": true,
@@ -89,6 +111,10 @@
         };
 
         $.ajax(settings).done(function (response) {
+            $('#nameform').hide();
+            $('#nanaa').show();
+            logged = name;
+            localStorage.setItem("login", logged);
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
@@ -98,27 +124,33 @@
     function logout() {
         //var name = $('#nameform').serialize();
         var name = logged;
+        if (name === "")
+            return;
         var settings = {
             "method": "POST",
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/logout",
             "data": name
         };
-        logged = "";
-        localStorage.removeItem("login");
         $.ajax(settings).done(function (response) {
+            $('#nameform').show();
+            $('#nanaa').hide();
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
+        logged = "";
+        localStorage.removeItem("login");
     }
     window.onload = function load() {
-        if (localStorage.length != 0)
-            logged = localStorage.getItem("login");
-    }
+        if (localStorage.length !== 0) {
+            check();
+        } else
+            logged = ""
+    };
     loadHistory();
     loadOnline();
     setInterval(loadOnline, 1000);
-    setInterval(loadHistory, 10000);
+    setInterval(loadHistory, 1000);
 </script>
