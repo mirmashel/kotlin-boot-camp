@@ -23,8 +23,8 @@ class UserDaoTest {
             addLogger(StdOutSqlLogger)
 
             val id = Users.insert {
-                it[id] = 44
-                it[login] = "login44"
+                it[id] = 10
+                it[login] = "login22"
             } get Users.id
 
             println(id)
@@ -32,13 +32,22 @@ class UserDaoTest {
     }
 
     @Test
-    fun `select * from User`() {
+    fun `select all from User`() {
         transaction {
             addLogger(StdOutSqlLogger)
 
-            val users = Users.selectAll().map {
-                it.toUser()
-            }
+            val users = UserDao().all
+
+            println(users)
+        }
+    }
+
+    @Test
+    fun `select Where from User`() {
+        transaction {
+            addLogger(StdOutSqlLogger)
+
+            val users = UserDao().getAllWhere("id>5")
 
             println(users)
         }
